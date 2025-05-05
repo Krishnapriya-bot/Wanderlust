@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust - Discover Unique Stays Across India</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff6038;
+            --secondary: #484848;
+            --light-gray: #f7f7f7;
+            --white: #ffffff;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            color: var(--secondary);
+            line-height: 1.6;
+        }
+        
+        /* Header Styles */
+        header {
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            padding: 8px 15px;
+            box-shadow: var(--shadow);
+        }
+        
+        .search-bar input {
+            border: none;
+            outline: none;
+            padding: 5px 10px;
+            min-width: 250px;
+        }
+        
+        .search-bar button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .user-menu a {
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: 500;
+        }
+        
+        .user-menu .host-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .user-menu .profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            padding: 5px 10px;
+        }
+        
+        .image-wrapper {
+            position: relative;
+        }
+
+        /* Property Card Styles */
+        .property-card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .property-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .property-image {
+            height: 250px;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .property-details {
+            padding: 15px;
+            position: relative;
+        }
+        
+        .property-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .property-location {
+            color: #717171;
+            margin-bottom: 10px;
+        }
+        
+        .property-price {
+            font-weight: 600;
+        }
+        
+        .property-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        
+        .rating-star {
+            color: var(--primary);
+        }
+        
+        .book-now-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-left: auto;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .book-now-btn:hover {
+            background: #e05534;
+        }
+
+        .property-info-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        /* Map Icon Styles */
+        .map-icon-container {
+            position: absolute;
+            bottom: 8rem;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .map-icon-container:hover {
+            background: #f5f5f5;
+            transform: scale(1.1);
+        }
+
+        .map-icon {
+            color: var(--primary);
+            font-size: 18px;
+        }
+        
+        /* Category Filter */
+        .category-filter {
+            padding: 20px 40px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .category-scroll {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        
+        .category-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            color: #717171;
+            transition: color 0.2s;
+            min-width: 80px;
+            padding: 0 5px;
+        }
+        
+        .category-item:hover, .category-item.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .category-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 30px 40px;
+        }
+        
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--light-gray);
+            text-align: center;
+        }
+        
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .category-scroll {
+                overflow-x: auto;
+                padding-bottom: 10px;
+                justify-content: flex-start;
+            }
+            
+            .category-item {
+                flex: 0 0 auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Search -->
+    <header>
+        <div class="navbar">
+            <a href="#" class="logo">Wanderlust</a>
+            
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Where are you going?">
+                <button>Search</button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Category Filter -->
+    <div class="category-filter">
+        <div class="category-scroll">
+            <div class="category-item active" data-category="beachfront">
+                <div class="category-icon">
+                    <i class="fas fa-umbrella-beach"></i>
+                </div>
+                <span>Beachfront</span>
+            </div>
+            
+            <div class="category-item" data-category="villas">
+                <div class="category-icon">
+                    <i class="fas fa-warehouse"></i>
+                </div>
+                <span>Villas</span>
+            </div>
+            
+            <div class="category-item" data-category="treehouses">
+                <div class="category-icon">
+                    <i class="fas fa-tree"></i>
+                </div>
+                <span>Treehouses</span>
+            </div>
+            
+            <div class="category-item" data-category="houseboats">
+                <div class="category-icon">
+                    <i class="fas fa-water"></i>
+                </div>
+                <span>Houseboats</span>
+            </div>
+            
+            <div class="category-item" data-category="lakefront">
+                <div class="category-icon">
+                    <i class="fas fa-mountain"></i>
+                </div>
+                <span>Lakefront</span>
+            </div>
+            
+            <div class="category-item" data-category="camping">
+                <div class="category-icon">
+                    <i class="fas fa-igloo"></i>
+                </div>
+                <span>Camping</span>
+            </div>
+
+            <div class="category-item" data-category="cabins">
+                <div class="category-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <span>Cabins</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2>Unique stays across India</h2>
+        
+        <div class="property-grid" id="property-grid">
+            <!-- Properties will be dynamically inserted here -->
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-bottom">
+            <p>© 2023 Wanderlust, Inc. · Privacy · Terms · Sitemap</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Property data
+        const properties = {
+            beachfront: [
+                {
+                    id: 1,
+                    title: "Casa Del Sol Beachfront Villa",
+                    location: "Goa",
+                    price: "₹12,000",
+                    rating: 4.9,
+                    image: ["/Images/goah.jpeg"],
+                    mapLink: "https://maps.app.goo.gl/kLq7hNnb3LzVnS5J9"
+                },
+                {
+                    id: 2,
+                    title: "Marari Pearl Seaside Cottage",
+                    location: "Kerala",
+                    price: "₹8,500",
+                    rating: 4.8,
+                    image: ["/Images/kerala bh.jpeg"],
+                    mapLink: "https://maps.app.goo.gl/DGUU5Ny6kAcbWQXq7"
+                },
+                {
+                    id: 3,
+                    title: "Pristine Beach Resort",
+                    location: "Andaman",
+                    price: "₹15,000",
+                    rating: 4.95,
+                    image: ["/Images/adamanh.jpeg"],
+                    mapLink: "https://maps.app.goo.gl/jsJMan5MG99Ntdyb6"
+                },
+                {
+                    id: 4,
+                    title: "Sagar Tarang Beach House",
+                    location: "Alibaug, Maharashtra",
+                    price: "₹10,500",
+                    rating: 4.8,
+                    image: ["/Images/alibag.jpg"],
+                    mapLink: "https://maps.app.goo.gl/kV2vXsevoCjPQ5st5"
+                },
+                {
+                    id: 5,
+                    title: "Bay Cliff Cottages",
+                    location: "Varkala, Kerala",
+                    price: "₹7,800",
+                    rating: 4.7,
+                    image: ["/Images/varkala.jpg"],
+                    mapLink: "https://maps.app.goo.gl/1VpvQUHK5JVXfUgx8"
+                },
+                {
+                    id: 6,
+                    title: "Kudle Beach View Resort",
+                    location: "Gokarna, Karnataka",
+                    price: "₹9,500",
+                    rating: 4.6,
+                    image: ["/Images/gokarna.jpg"],
+                    mapLink: "https://maps.app.goo.gl/P4R195D8qnfBMRqy6"
+                },
+                {
+                    id: 8,
+                    title: "Morjim Beach Retreat",
+                    location: "Morjim, Goa",
+                    price: "₹11,200",
+                    rating: 4.8,
+                    image: ["/Images/morjim.jpg"],
+                    mapLink: "https://maps.app.goo.gl/y4cZCD742mmi8cuF7"
+                },
+                {
+                    id: 9,
+                    title: "Bogmallo Bayfront Cottage",
+                    location: "Bogmallo, Goa",
+                    price: "₹5,500",
+                    rating: 4.4,
+                    image: ["/Images/goahh.jpg"],
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                }
+            ],
+
+            villas: [
+                {
+                    id: 6,
+                    title: "StayVista at Ananta ",
+                    location: "Bangalore",
+                    price: "₹18,000",
+                    rating: 4.9,
+                    image: "/Images/banglore.webp",
+                    mapLink: "https://www.google.com/maps/place/StayVista+at+Ananta+-+Breakfast+Included++Basketball+Court/@12.9605207,77.3692815,111199m/data=!3m1!1e3!4m10!3m9!5m3!1s2025-05-06!4m1!1i2!8m2!3d12.8653898!4d77.4365616!16s%2Fg%2F11lcf4yx2n!17BQ0FF?entry=ttu&g_ep=EgoyMDI1MDQzMC4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D"
+                },
+                {
+                    id: 7,
+                    title: "Pearl Palace Heritage",
+                    location: "Udaipur",
+                    price: "₹22,000",
+                    rating: 4.95,
+                    image: "/Images/udaipur.jpg",
+                    mapLink: "https://maps.app.goo.gl/t9vnLKHBKsdsZPkb8"
+                },
+                {
+                    id: 10,
+                    title: "SPearl-Continental Villa",
+                    location: "Manali, Himachal Pradesh",
+                    price: "₹9,800",
+                    rating: 4.7,
+                    image: "/Images/manaliv.jpg",
+                    mapLink: "https://maps.app.goo.gl/VY6SfD3x6Fyb9NaB8"
+                },
+                {
+                    id: 11,
+                    title: "Royal Estate Villa Udaipur",
+                    location: "Udaipur, Rajasthan",
+                    price: "₹14,500",
+                    rating: 4.9,
+                    image: "/Images/lux udaipur.webp",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 12,
+                    title: "Lonavala Hilltop Hideaway",
+                    location: "Lonavala, Maharashtra",
+                    price: "₹8,700",
+                    rating: 4.6,
+                    image: "/Images/lonavala.jpg",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 13,
+                    title: "Munnar Tea Garden Villa",
+                    location: "Munnar, Kerala",
+                    price: "₹7,200",
+                    rating: 4.5,
+                    image: "/Images/munnar.jpg",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 14,
+                    title: "Coorg Coffee Estate Villa",
+                    location: "Coorg, Karnataka",
+                    price: "₹6,900",
+                    rating: 4.6,
+                    image: "/Images/coorg.jpg",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 15,
+                    title: "Jaipur Modern Villa",
+                    location: "Jaipur, Rajasthan",
+                    price: "₹10,000",
+                    rating: 4.7,
+                    image: "/Images/jaipur.webp",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 16,
+                    title: "Green Canopy Jungle Villa",
+                    location: "Wayanad, Kerala",
+                    price: "₹7,500",
+                    rating: 4.8,
+                    image: "/Images/wayanad.png",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                }
+            ],
+
+            treehouses: [
+                {
+                    id: 10,
+                    title: "Evergreen Treehouse Retreat",
+                    location: "Coorg",
+                    price: "₹6,500",
+                    rating: 4.9,
+                    image: "/Images/tree coorg.avif",
+                    mapLink: "https://maps.app.goo.gl/AWAzaHSory1P5BSQA"
+                },
+                {
+                    id: 26,
+                    title: "Wayanad Sky Nest Treehouse",
+                    location: "Wayanad, Kerala",
+                    price: "₹8,000",
+                    rating: 4.8,
+                    image: "/Images/tree wayanad.jpg",
+                    mapLink: "https://maps.app.goo.gl/LJ1LFjM4TAnwajyP7"
+                },
+                {
+                    id: 27,
+                    title: "Rainforest Escape Munnar",
+                    location: "Munnar, Kerala",
+                    price: "₹7,200",
+                    rating: 4.7,
+                    image: "/Images/tree munnar.png",
+                    mapLink: "https://maps.app.goo.gl/2QeSkxDZxBqnbeNV7"
+                },
+                {
+                    id: 28,
+                    title: "The Machan - A Treehouse",
+                    location: "Lonavala, Maharashtra",
+                    price: "₹6,800",
+                    rating: 4.6,
+                    image: "/Images/tree lonavala.jpeg",
+                    mapLink: "https://maps.app.goo.gl/o9RB1H11QTxZ8FXy5"
+                },
+                {
+                    id: 29,
+                    title: "Canopy Nest Coorg Treehouse",
+                    location: "Coorg, Karnataka",
+                    price: "₹7,500",
+                    rating: 4.7,
+                    image: "/Images/tree 2 coorg.webp",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 30,
+                    title: "Eco Haven Treehouse",
+                    location: "Thekkady, Kerala",
+                    price: "₹6,300",
+                    rating: 4.5,
+                    image: "/Images/thekkady.jpg",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 31,
+                    title: "Rishikesh River View Treehouse",
+                    location: "Rishikesh, Uttarakhand",
+                    price: "₹8,200",
+                    rating: 4.8,
+                    image: "/Images/rishikesh.webp",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 32,
+                    title: "Woodland View Treehouse",
+                    location: "Manali, Himachal Pradesh",
+                    price: "₹7,900",
+                    rating: 4.6,
+                    image: "/Images/tree manali.avif",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 33,
+                    title: "Bamboo Canopy Cottage",
+                    location: "Cherrapunji, Meghalaya",
+                    price: "₹6,700",
+                    rating: 4.7,
+                    image: "/Images/tree meghalaya.png",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                }
+            ],
+
+            houseboats: [
+                {
+                    id: 12,
+                    title: "Alleppey Houseboat Cruise",
+                    location: "Alleppey",
+                    price: "₹7,500",
+                    rating: 4.8,
+                    image: "/Images/allepey.jpg",
+                    mapLink: "https://maps.app.goo.gl/SyaAPzTnckCwA74w6"
+                },
+                {
+                    id: 13,
+                    title: "Kashmir Royal Houseboat",
+                    location: "Srinagar",
+                    price: "₹10,000",
+                    rating: 4.75,
+                    image: "/Images/srinagar.JPG",
+                    mapLink: "https://maps.app.goo.gl/n6MUY7j6U3oAp6dp7"
+                },
+                {
+                    id: 34,
+                    title: "Alleppey Boat House",
+                    location: "Alleppey, Kerala",
+                    price: "₹9,500",
+                    rating: 4.9,
+                    image: "/Images/allepey2.jpg",
+                    mapLink: "https://maps.app.goo.gl/iEHW3nABGh8oj3eLA"
+                },
+                {
+                    id: 35,
+                    title: "Kumarakom Traditional Stay",
+                    location: "Kumarakom, Kerala",
+                    price: "₹8,200",
+                    rating: 4.8,
+                    image: "/Images/kumarakom.webp",
+                    mapLink: "https://maps.app.goo.gl/YBwWxDgszoMgimGJA"
+                },
+                {
+                    id: 36,
+                    title: "Dal Lake Floating Villa",
+                    location: "Dal Lake, Srinagar",
+                    price: "₹7,800",
+                    rating: 4.7,
+                    image: "/Images/srinagar2.jpg",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 37,
+                    title: "Romantic Escape in Kollam",
+                    location: "Kollam, Kerala",
+                    price: "₹8,500",
+                    rating: 4.6,
+                    image: "/Images/kollam.webp",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 38,
+                    title: "Kochi Heritage Boat",
+                    location: "Kochi, Kerala",
+                    price: "₹7,900",
+                    rating: 4.5,
+                    image: "/Images/kochi.jpg",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 39,
+                    title: "Nigeen Lake Houseboat Stay",
+                    location: "Srinagar, Jammu & Kashmir",
+                    price: "₹8,000",
+                    rating: 4.7,
+                    image: "/Images/srinagar3.jpg",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                }
+            ],
+
+            lakefront: [
+                {
+                    id: 14,
+                    title: "Nainital Lakeview Cottage",
+                    location: "Nainital",
+                    price: "₹5,500",
+                    rating: 4.7,
+                    image: "/Images/nainital.jpeg",
+                    mapLink: "https://maps.app.goo.gl/uNo1Q4TYVBmdgEEw7"
+                },
+                {
+                    id: 15,
+                    title: "Willo stays lakeside luxury villa",
+                    location: "Ooty",
+                    price: "₹12,000",
+                    rating: 4.9,
+                    image: "/Images/ooty lake.jpg",
+                    mapLink: "https://maps.app.goo.gl/5wRx3QWpA6hwhJNXA"
+                },
+                {
+                    id: 41,
+                    title: "The Lake View Palace Udaipur",
+                    location: "Udaipur, Rajasthan",
+                    price: "₹16,000",
+                    rating: 4.9,
+                    image: "/Images/udaipur lake.webp",
+                    mapLink: "https://maps.app.goo.gl/vzJNe5b5br3Dfcxq9"
+                },
+                {
+                    id: 42,
+                    title: "The Tal Paradise",
+                    location: "Bhimtal, Uttarakhand",
+                    price: "₹7,500",
+                    rating: 4.6,
+                    image: "/Images/utt lake.jpg",
+                    mapLink: "https://maps.app.goo.gl/GjLQeJEcYc9eZMFa8"
+                },
+                {
+                    id: 43,
+                    title: "Lavasa Lakefront Escape",
+                    location: "Lavasa, Maharashtra",
+                    price: "₹8,800",
+                    rating: 4.6,
+                    image: "/Images/lavasa.webp",
+                    mapLink: "https://maps.app.goo.gl/XuVwm1DGvvkMusSF9"
+                },
+                {
+                    id: 44,
+                    title: "Vembanad Tranquil Cottage",
+                    location: "Kumarakom, Kerala",
+                    price: "₹7,200",
+                    rating: 4.7,
+                    image: "/Images/kumarakom.jpg",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 45,
+                    title: "Loktak Lake Eco Resort",
+                    location: "Loktak Lake, Manipur",
+                    price: "₹6,900",
+                    rating: 4.5,
+                    image: "/Images/manipur.jpg",
+                    mapLink: "https://maps.app.goo.gl/KmzBgUjEaM2Z6Kgr6"
+                }
+            ],
+
+            camping: [
+                {
+                    id: 16,
+                    title: "Rishikesh Glamping Adventure",
+                    location: "Rishikesh",
+                    price: "₹3,500",
+                    rating: 4.6,
+                    image: "/Images/glamping.jpg",
+                    mapLink: "https://maps.app.goo.gl/vwJr3kGDSzZKBFtx5"
+                },
+                {
+                    id: 17,
+                    title: "Ladakh Wilderness Camp",
+                    location: "Ladakh",
+                    price: "₹4,500",
+                    rating: 4.8,
+                    image: "/Images/ladakh camp.avif",
+                    mapLink: "https://maps.app.goo.gl/t3LZEvSr4Jj7Cnpq5"
+                },
+                {
+                    id: 47,
+                    title: "Golden Star Desert Camp",
+                    location: "Jaisalmer, Rajasthan",
+                    price: "₹5,500",
+                    rating: 4.7,
+                    image: "/Images/jaisalmar.webp",
+                    mapLink: "https://maps.app.goo.gl/DxXgKGKjLNrWYe5A8"
+                },
+                {
+                    id: 48,
+                    title: "Div Camps and Adventures",
+                    location: "Spiti, Himachal Pradesh",
+                    price: "₹6,200",
+                    rating: 4.8,
+                    image: "/Images/himachal camp.jpg",
+                    mapLink: "https://maps.app.goo.gl/hxcwfoSfYufNBfQx8"
+                },
+                {
+                    id: 49,
+                    title: "Backwater Tent Stay",
+                    location: "Alleppey, Kerala",
+                    price: "₹4,800",
+                    rating: 4.6,
+                    image: "/Images/allepey camp.jpeg",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 50,
+                    title: "Riverside Adventure Tents",
+                    location: "Rishikesh, Uttarakhand",
+                    price: "₹3,900",
+                    rating: 4.5,
+                    image: "/Images/rishi camp.webp",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 51,
+                    title: "Pushkar Desert Nights Camp",
+                    location: "Pushkar, Rajasthan",
+                    price: "₹4,200",
+                    rating: 4.4,
+                    image: "/Images/pushkar.jpg",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 52,
+                    title: "Coorg Forest Tent Stay",
+                    location: "Coorg, Karnataka",
+                    price: "₹5,000",
+                    rating: 4.6,
+                    image: "/Images/camp coorg.avif",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 53,
+                    title: "Kasol Mountain View Camp",
+                    location: "Kasol, Himachal Pradesh",
+                    price: "₹4,600",
+                    rating: 4.7,
+                    image: "/Images/kasol.jpg",
+                    mapLink: "https://maps.app.goo.gl/v7smuB5xtnnj85td7"
+                }
+            ],
+
+            cabins: [
+                {
+                    id: 54,
+                    title: "FogHills Cabin",
+                    location: "Manali, Himachal Pradesh",
+                    price: "₹6,800",
+                    rating: 4.8,
+                    image: ["/Images/wooden cabin.jpeg"],
+                    mapLink: "https://maps.app.goo.gl/38AkKX6EJXZABDhc9"
+                },
+                {
+                    id: 55,
+                    title: "Nainital Logginn KY",
+                    location: "Nainital, Uttarakhand",
+                    price: "₹6,300",
+                    rating: 4.7,
+                    image: ["/Images/wooden 2.webp"],
+                    mapLink: "https://maps.app.goo.gl/xjagSnqVyBugR3PX8"
+                },
+                {
+                    id: 56,
+                    title: "Golden Triangle",
+                    location: "Coorg, Karnataka",
+                    price: "₹5,900",
+                    rating: 4.6,
+                    image: "/Images/coorg cabin.jpg",
+                    mapLink: "https://maps.app.goo.gl/3ekNqa56qrREv3j19"
+                },
+                {
+                    id: 57,
+                    title: "Mukteshwar Glass Cabin",
+                    location: "Mukteshwar, Uttarakhand",
+                    price: "₹7,200",
+                    rating: 4.9,
+                    image: "/Images/utt cabin.jpg",
+                    mapLink: "https://maps.app.goo.gl/e9KfU6RRvwCGWnS86"
+                },
+                {
+                    id: 58,
+                    title: "The Cabin Dharamshala",
+                    location: "Tirthan Valley, Himachal Pradesh",
+                    price: "₹7,800",
+                    rating: 4.7,
+                    image: "/Images/himachal cabin.jpg",
+                    mapLink: "https://maps.app.goo.gl/jF6DdFwQmvdNt9mr6"
+                },
+                {
+                    id: 59,
+                    title: "Munnar Forest Edge Cabin",
+                    location: "Munnar, Kerala",
+                    price: "₹6,500",
+                    rating: 4.6,
+                    image: "/Images/munnar cabin.jpg",
+                    mapLink: "https://maps.app.goo.gl/YyMA7JUmbG8THJJa7"
+                },
+                {
+                    id: 60,
+                    title: "Ooty Hillside Cabin",
+                    location: "Ooty, Tamil Nadu",
+                    price: "₹6,900",
+                    rating: 4.8,
+                    image: "/Images/ooty cabin.avif",
+                    mapLink: "https://maps.app.goo.gl/mQPS4ZCvH81J4ioDA"
+                }
+            ]
+            
+        };
+
+        // Function to render properties
+        function renderProperties(category) {
+            const propertyGrid = document.getElementById('property-grid');
+            propertyGrid.innerHTML = '';
+            
+            if (properties[category]) {
+                properties[category].forEach(property => {
+                    const propertyCard = document.createElement('div');
+                    propertyCard.className = 'property-card';
+                    
+                    // Handle both array and string image formats
+                    const imageSrc = Array.isArray(property.image) ? property.image[0] : property.image;
+                    
+                    propertyCard.innerHTML = `
+                        <div class="image-wrapper">
+                            <img src="${imageSrc}" alt="${property.title}" class="property-image">
+                        </div>
+                        <div class="property-details">
+                            <h3 class="property-title">${property.title}</h3>
+                            <p class="property-location">${property.location}</p>
+                            <p class="property-price">${property.price}</p>
+                            <div class="property-info-footer">
+                                <div class="property-rating">
+                                    <i class="fas fa-star rating-star"></i>
+                                    <span>${property.rating}</span>
+                                </div>
+                                <a href="bookingform3.html" class="book-now-btn">Book Now</a>
+                            </div>
+                            <a href="${property.mapLink || '#'}" target="_blank" class="map-icon-container">
+                                <i class="fas fa-map-marker-alt map-icon"></i>
+                            </a>
+                        </div>
+                    `;
+                    
+                    propertyGrid.appendChild(propertyCard);
+                });
+            } else {
+                propertyGrid.innerHTML = '<p>No properties found in this category.</p>';
+            }
+        }
+
+        // Initial render with beachfront properties
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProperties('beachfront');
+            
+            // Add click event listeners to category items
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all items
+                    document.querySelectorAll('.category-item').forEach(i => {
+                        i.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Get category from data attribute
+                    const category = this.getAttribute('data-category');
+                    
+                    // Render properties for selected category
+                    renderProperties(category);
+                });
+            });
+            
+            // Search functionality
+            document.querySelector('.search-bar button').addEventListener('click', function() {
+                const searchTerm = document.querySelector('.search-bar input').value.toLowerCase();
+                alert(`Searching for: ${searchTerm}`);
+                // In a real implementation, this would filter properties
+            });
+        });
+    </script>
+</body>
+</html>
