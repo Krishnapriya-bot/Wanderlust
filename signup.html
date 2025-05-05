@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust - Sign Up</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="signup.css">    
+    <link rel="icon" href="Images/FAVICON.png">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>Wander<span>lust</span></h1>
+            <p>Discover India with us</p>
+        </div>
+        <h2>Signup</h2>
+        
+        <div class="success-msg" id="success-message">
+            <i class="fas fa-check-circle"></i> Account created successfully! Redirecting...
+        </div>
+        
+        <div class="error-msg" id="error-message">
+            <i class="fas fa-exclamation-circle"></i> Error creating account. Please try again.
+        </div>
+        
+        <form id="signup-form">
+            <div class="form-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="fullname" placeholder="Enter your name" required>
+            </div>
+            
+            <div class="form-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="signup-email" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="form-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="signup-password" placeholder="Create a password" required>
+            </div>
+            
+            <div class="form-group">
+                <i class="fas fa-key"></i>
+                <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+            </div>
+            
+            <button type="submit" class="btn"> Sign Up</button>
+        </form>
+        
+        <div class="or-divider">
+            <span>or</span>
+        </div>
+        
+        <div class="google-btn-wrapper">
+            <div id="g_id_onload"
+                 data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                 data-callback="handleGoogleSignUp"
+                 data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-size="large"
+                 data-theme="outline"
+                 data-text="sign_up_with"
+                 data-shape="rectangular"
+                 data-logo_alignment="center">
+            </div>
+        </div>
+        
+        <div class="login-link">
+           Already have an account? <a href="login.html">Login</a>
+        </div>
+    </div>
+
+    <script>
+        // Signup form submission
+        $('#signup-form').submit(function(e) {
+            e.preventDefault();
+            
+            const fullname = $('#fullname').val();
+            const email = $('#signup-email').val();
+            const password = $('#signup-password').val();
+            const confirmPassword = $('#confirm-password').val();
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                $('#error-message').text('Passwords do not match!').show();
+                return;
+            }
+            
+            // Here you would typically send an AJAX request to your backend
+            console.log('Signup attempt with:', email, fullname);
+            
+            // Show success message
+            $('#error-message').hide();
+            $('#success-message').html('<i class="fas fa-check-circle"></i> Account created successfully! Redirecting...').show();
+            
+            // Simulate redirect after signup
+            setTimeout(function() {
+                alert('Redirect to dashboard would happen here');
+                // window.location.href = '/dashboard';
+            }, 2000);
+        });
+        
+        // Google Sign Up handler
+        function handleGoogleSignUp(response) {
+            // The ID token you need to pass to your backend:
+            const id_token = response.credential;
+            
+            console.log("Google Sign Up - ID Token:", id_token);
+            
+            // Here you would send this token to your server to create a new account or log in an existing one
+            $('#success-message').html('<i class="fas fa-check-circle"></i> Google sign-up successful! Redirecting...').show();
+            
+            // Simulate redirect after signup
+            setTimeout(function() {
+                alert('Redirect to dashboard would happen here (after Google sign-up)');
+                // window.location.href = '/dashboard';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

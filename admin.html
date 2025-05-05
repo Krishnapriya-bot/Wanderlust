@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel India - Bookings Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: orange;
+            color: white;
+            padding: 20px 0;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar-header h2 img {
+            width: 30px;
+        }
+        
+        .nav-menu {
+            margin-top: 20px;
+        }
+        
+        .nav-item {
+            padding: 0;
+            transition: all 0.3s;
+        }
+        
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: white;
+            width: 100%;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .header h1 {
+            color: orange;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .bookings-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        
+        .bookings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .search-filter {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .search-box {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 250px;
+        }
+        
+        .filter-dropdown {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            color: #555;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status.confirmed {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status.pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status.cancelled {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .view-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            background-color: #1e3a8a;
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-header h2 {
+            color: #1e3a8a;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #777;
+        }
+        
+        .traveler-details {
+            margin-bottom: 30px;
+        }
+        
+        .detail-section {
+            margin-bottom: 20px;
+        }
+        
+        .detail-section h3 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            width: 150px;
+            color: #555;
+        }
+        
+        .detail-value {
+            flex: 1;
+        }
+        
+        .companions-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+        
+        .companions-table th {
+            background-color: #f8f9fa;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .companions-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+            
+            .sidebar-header h2 span, .nav-item span {
+                display: none;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .modal-content {
+                width: 95%;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+            }
+            
+            .detail-label {
+                width: 100%;
+                margin-bottom: 2px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>
+                    <i class="fas fa-compass"></i>
+                    <span>Travel India</span>
+                </h2>
+            </div>
+            <div class="nav-menu">
+                <div class="nav-item active">
+                    <a href="admin.html">
+                        <i class="fas fa-suitcase"></i>
+                        <span>Bookings</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="admindashboard.html">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+               
+                
+                <!-- <div class="nav-item">
+                    <a href="#">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </div> -->
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Bookings Management</h1>
+                <div class="user-info">
+                    <span>Admin</span>
+                    <img src="Images/admin.png" alt="Admin">
+                </div>
+            </div>
+            
+            <div class="bookings-container">
+                <div class="bookings-header">
+                    <h2>All Bookings</h2>
+                    <div class="search-filter">
+                        <input type="text" class="search-box" placeholder="Search bookings...">
+                        <select class="filter-dropdown">
+                            <option value="all">All Status</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="pending">Pending</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Primary Traveler</th>
+                            <th>Package</th>
+                            <th>Travel Date</th>
+                            <th>Travelers</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookings-table-body">
+                        <!-- Bookings will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Details Modal -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalBookingId">Traveler Details</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <div class="traveler-details">
+                <div class="detail-section">
+                    <h3>Primary Traveler</h3>
+                    <div class="detail-row">
+                        <div class="detail-label">Full Name:</div>
+                        <div class="detail-value" id="primaryName">-</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Email:</div>
+                        <div class="detail-value" id="primaryEmail">-</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Phone:</div>
+                        <div class="detail-value" id="primaryPhone">-</div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3>Companion Travelers</h3>
+                    <table class="companions-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Relationship</th>
+                            </tr>
+                        </thead>
+                        <tbody id="companionsTableBody">
+                            <!-- Companion travelers will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample booking data with traveler details
+        const bookings = [
+            {
+                id: "BK1001",
+                primaryTraveler: {
+                    name: "Rahul Sharma",
+                    email: "rahul.sharma@example.com",
+                    phone: "+91 9876543210"
+                },
+                package: "Golden Triangle Tour",
+                date: "2023-06-15",
+                travelers: 4,
+                companions: [
+                    {
+                        name: "Priya Sharma",
+                        age: 32,
+                        gender: "Female",
+                        relationship: "Spouse"
+                    },
+                    {
+                        name: "Aarav Sharma",
+                        age: 8,
+                        gender: "Male",
+                        relationship: "Son"
+                    },
+                    {
+                        name: "Rohit Sharma",
+                        age: 60,
+                        gender: "Male",
+                        relationship: "Father"
+                    }
+                ],
+                amount: "₹1,25,999",
+                status: "confirmed"
+            },
+        ];
+
+        // Function to render bookings table
+        function renderBookingsTable(filteredBookings = bookings) {
+            const tableBody = document.getElementById('bookings-table-body');
+            tableBody.innerHTML = '';
+            
+            filteredBookings.forEach(booking => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${booking.id}</td>
+                    <td>
+                        <div><strong>${booking.primaryTraveler.name}</strong></div>
+                        <div class="text-muted">${booking.primaryTraveler.phone}</div>
+                    </td>
+                    <td>${booking.package}</td>
+                    <td>${booking.date}</td>
+                    <td>
+                        <div>${booking.travelers}
+                        <button class="view-btn" onclick="viewBookingDetails('${booking.id}')">  <i class="fas fa-eye"></i></button>
+                        </div>
+                    </td>
+                    <td>${booking.amount}</td>
+                    <td><span class="status ${booking.status}">${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}</span></td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Function to filter bookings
+        function filterBookings() {
+            const searchTerm = document.querySelector('.search-box').value.toLowerCase();
+            const statusFilter = document.querySelector('.filter-dropdown').value;
+            
+            let filtered = bookings.filter(booking => {
+                const matchesSearch = 
+                    booking.id.toLowerCase().includes(searchTerm) ||
+                    booking.primaryTraveler.name.toLowerCase().includes(searchTerm) ||
+                    booking.package.toLowerCase().includes(searchTerm) ||
+                    booking.primaryTraveler.email.toLowerCase().includes(searchTerm) ||
+                    booking.primaryTraveler.phone.includes(searchTerm);
+                
+                const matchesStatus = statusFilter === 'all' || booking.status === statusFilter;
+                
+                return matchesSearch && matchesStatus;
+            });
+            
+            renderBookingsTable(filtered);
+        }
+
+        // View booking details in modal
+        function viewBookingDetails(bookingId) {
+            const booking = bookings.find(b => b.id === bookingId);
+            if (booking) {
+                // Set primary traveler details
+                document.getElementById('modalBookingId').textContent = `Booking ${booking.id}`;
+                document.getElementById('primaryName').textContent = booking.primaryTraveler.name;
+                document.getElementById('primaryEmail').textContent = booking.primaryTraveler.email;
+                document.getElementById('primaryPhone').textContent = booking.primaryTraveler.phone;
+                
+                // Set companion travelers
+                const companionsBody = document.getElementById('companionsTableBody');
+                companionsBody.innerHTML = '';
+                
+                if (booking.companions && booking.companions.length > 0) {
+                    booking.companions.forEach(companion => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${companion.name}</td>
+                            <td>${companion.age}</td>
+                            <td>${companion.gender}</td>
+                            <td>${companion.relationship}</td>
+                        `;
+                        companionsBody.appendChild(row);
+                    });
+                } else {
+                    const row = document.createElement('tr');
+                    row.innerHTML = '<td colspan="4" style="text-align: center;">No companion travelers</td>';
+                    companionsBody.appendChild(row);
+                }
+                
+                // Show modal
+                document.getElementById('bookingModal').style.display = 'flex';
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            renderBookingsTable();
+            
+            // Add event listeners for search and filter
+            document.querySelector('.search-box').addEventListener('input', filterBookings);
+            document.querySelector('.filter-dropdown').addEventListener('change', filterBookings);
+            
+            
+            // Close modal when clicking outside
+            document.getElementById('bookingModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

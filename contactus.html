@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact us</title>
+    <!-- Added Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="contactus.css">
+    <link rel="icon" href="Images/FAVICON.png">
+</head>
+<body>
+    <header>
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="explore.html">Explore</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="contactus.html">Contact Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <div class="search-box">
+                                <input type="text" placeholder="Search">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="booking.html">Bookings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="chat.html" target="_blank">Chat</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="signup.html">Signup</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="contact">
+        <div class="container">
+            <h2>Get in Touch</h2>
+            <div class="contact-wrapper">
+                <div class="contact-form">
+                    <h3>Send us a message</h3>
+                    <form action="https://api.web3forms.com/submit" method="POST">
+                        <div class="form-group">
+                            <input type="hidden" name="access_key" value="007f6b13-0851-46c7-b510-a4fae31da752">
+                            <input type="text" id="name" name="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    <div class="info-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <p>+91 8591289068</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <p>wanderlust@gmail.com</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fa-solid fa-map-pin"></i>
+                        <p>CSMU, Navi Mumbai</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    document.body.style.opacity = 1;
+
+    document.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", function(event) {
+            // Skip if link should open in a new tab
+            if (this.target === "_blank") {
+                return;
+            }
+
+            // Only apply transition for internal links
+            if (this.href.includes(window.location.hostname)) {
+                event.preventDefault();
+                let targetUrl = this.href;
+
+                document.body.style.opacity = 0;
+
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 500);
+            }
+        });
+    });
+});
+
+    </script>
+</body>
+</html>

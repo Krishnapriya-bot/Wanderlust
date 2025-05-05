@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust</title>
+    <!-- Fonts & Bootstrap -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Playfair+Display:wght@700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Icons & Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="ht.css">
+    <link rel="icon" type="image/png" href="Images/FAVICON.png">
+
+</head>
+<body>
+    <header class="page-header">
+        <!-- Navigation -->
+     <nav class="navbar navbar-expand-lg">
+         <div class="container-fluid">
+             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                 <span class="navbar-toggler-icon"></span>
+             </button>
+             <div class="collapse navbar-collapse" id="navbarNav">
+                 <ul class="navbar-nav mx-auto">
+                     <li class="nav-item">
+                         <a class="nav-link" href="home.html">Home</a>
+                     </li>
+                     <li class="nav-item">
+                         <a class="nav-link" href="explore.html">Explore</a>
+                     </li>
+                     <li class="nav-item">
+                         <a class="nav-link" href="contactus.html">Contact Us</a>
+                     </li>
+                     <li class="nav-item">
+                         <div class="search-box">
+                             <input type="text" placeholder="Search">
+                             <i class="fa-solid fa-magnifying-glass"></i>
+                         </div>
+                     </li>
+                     <li class="nav-item">
+                         <a class="nav-link" href="booking.html">Bookings</a>
+                     </li>
+                     <li class="nav-item">
+                         <a class="nav-link" href="chat.html">Chat</a>
+                     </li>
+                     <li class="nav-item">
+                         <a class="nav-link" href="signup.html">Signup</a>
+                     </li>
+                 </ul>
+             </div>
+         </div>
+     </nav>
+     </header>
+     <!-- Nav ends -->
+    <!-- Dropdown -->
+    <div class="container mt-4 text-center">
+        <h2>Explore Indian Religious Heritages</h2>
+        <select id="zoneFilter" class="form-select dropdown-small mx-auto" placeholder>
+            <option value="all" hidden>Select Zone</option>
+            <option value="north">North</option>
+            <option value="south">South</option>
+            <option value="east">East</option>
+            <option value="west">West</option>
+        </select>
+    </div>
+    <!-- Card Container -->
+    <div id="templeContainer">
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/punjab.jpeg" class="img" alt="Golden Temple">
+            </a>
+            <div class="card-content">
+                <p class="title">Golden Temple</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Amritsar, Punjab</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-primary book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/Mathura-Vrindavan Temples.jpg" class="img" alt="Vrindavan Temple">
+            </a>
+            <div class="card-content">
+                <p class="title">Vrindavan temple</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Mathura, Uttar Pradesh</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-primary book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/Jama Masjid – Bikaner, R.webp" class="img" alt="Jama Masjid, Bikaner">
+            </a>
+            <div class="card-content">
+                <p class="title">Jama Masjid</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Bikaner, Rajasthan</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/MASRUR.jpg" class="img" alt="Masrur Rock Cut Temples">
+            </a>
+            <div class="card-content">
+                <p class="title">Masrur Rock Cut Temples</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Kangra, Himachal Pradesh</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/Ram_Janambhoomi uttarpradesh.jpg" class="img" alt="Sikkim">
+            </a>
+            <div class="card-content">
+                <p class="title">Ram janmabhoomi</p>
+                <p class="subtitle">  <i class="fa-solid fa-location-dot"></i> Ayodhya, Uttar Pradesh</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/tawang.webp" class="img" alt="Tawang Monastery">
+            </a>
+            <div class="card-content">
+                <p class="title">Tawang Monastery</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Tawang, Arunachal Pradesh</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/murudeshwar.jpg" class="img" alt="Murudeshwar Temple">
+            </a>
+            <div class="card-content">
+                <p class="title">Murudeshwar Temple</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Murudeshwar, Karnataka</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/🔥🛕The Brihadeeswarar Temple - Thanjavur 🛕🔥.jpeg" class="img" alt="Brihadeeswarar Temple">
+            </a>
+            <div class="card-content">
+                <p class="title">Brihadeeswarar Temple</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Thanjavur, Tamil Nadu</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/Padmanabhaswamy Temple Trivandrum.jpeg" class="img" alt="Padmanabhaswamy Temple">
+            </a>
+            <div class="card-content">
+                <p class="title">Padmanabhaswamy Temple</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Thiruvananthapuram, Kerala</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/bom.jpg" class="img" alt="Basilica of Bom Jesus">
+            </a>
+            <div class="card-content">
+                <p class="title">Basilica of Bom Jesus</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Old Goa, Goa</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/bibi ka maqbara.jpg" class="img" alt="Bibi Ka Maqbara">
+            </a>
+            <div class="card-content">
+                <p class="title">Bibi Ka Maqbara</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Aurangabad, Maharashtra</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/haji ali dargah.jpg" class="img" alt="Haji Ali Dargah">
+            </a>
+            <div class="card-content">
+                <p class="title">Haji Ali Dargah</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/kailash.png" class="img" alt="Kailasa Temple">
+            </a>
+            <div class="card-content">
+                <p class="title">Kailasa Temple</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Ellora, Maharashtra</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/gloria.jpg" class="img" alt="Gloria Church">
+            </a>
+            <div class="card-content">
+                <p class="title">Gloria Church</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/Somanath.jpg" class="img" alt="Sikkim">
+            </a>
+            <div class="card-content">
+                <p class="title">Somnath Temple</p>
+                <p class="subtitle">  <i class="fa-solid fa-location-dot"></i> Gir Somnath, Gujarat</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/jagannath.jpg" class="img" alt="Jagannath Temple">
+            </a>
+            <div class="card-content">
+                <p class="title">Jagannath Temple</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Howrah, West Bengal</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/Shree Jagannatha Temple Office, Puri (@SJTA_Puri) on X.jpeg" class="img" alt="Jagannath Temple">
+            </a>
+            <div class="card-content">
+                <p class="title">Jagannath Temple</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Puri, Odisha</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/gaur.jpg" class="img" alt="Lotan Masjid, Gaur">
+            </a>
+            <div class="card-content">
+                <p class="title">Lotan Masjid</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Gaur, West Bengal</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/St_Paul's_Cathedral.jpg" class="img" alt="St. Paul's Cathedral">
+            </a>
+            <div class="card-content">
+                <p class="title">St. Paul's Cathedral</p>
+                <p class="subtitle">  <i class="fa-solid fa-location-dot"></i> Kolkata, West Bengal</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/sun temple.webp" class="img" alt="Sun Temple">
+            </a>
+            <div class="card-content">
+                <p class="title">Sun Temple</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Konark, Odisha</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/urgelling monastery.jpg" class="img" alt="Urgelling Monastery">
+            </a>
+            <div class="card-content">
+                <p class="title">Urgelling Monastery</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Tawang, Arunachal Pradesh</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/anthony.jpg" class="img" alt="Thousand Pillar Temple">
+            </a>
+            <div class="card-content">
+                <p class="title">St. Anthony's Church</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i>Anakapalle, Andhra Pradesh</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/vadakunath.jpeg" class="img" alt="Vadakkunnathan Temple">
+            </a>
+            <div class="card-content">
+                <p class="title">Vadakkunnathan Temple</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Thrissur, Kerala</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="/Images/Dilwara-Jain-Temples-Mount-Abu1.jpg" class="img" alt="Dilwara Temple">
+            </a>
+            <div class="card-content">
+                <p class="title">Dilwara Temple</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Mount Abu, Rajasthan</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#" class="pdf-link" target="_blank">
+                <img src="Images/nabadwip.jpg" class="img" alt="Nabadwip Temple">
+            </a>
+            <div class="card-content">
+                <p class="title">Nabadwip Temple</p>
+                <p class="subtitle"><i class="fa-solid fa-location-dot"></i> Nabadwip, West Bengal</p>
+                <div class="button-group">
+                    <a href="bookingform2.html" class="btn btn-dark book-btn" target="_blank">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JavaScript for Dynamic Content Loading -->
+    <script>
+        document.getElementById("zoneFilter").addEventListener("change", function () {
+            let selectedZone = this.value;
+            let container = document.getElementById("templeContainer");
+            if (selectedZone === "all") {
+                container.innerHTML = "";
+                return;
+            }
+            let fileName = selectedZone + ".html"; 
+            fetch(fileName)
+                .then(response => {
+                    if (!response.ok) throw new Error("File not found");
+                    return response.text();
+                })
+                .then(html => {
+                    container.innerHTML = html;
+                })
+                .catch(error => {
+                    container.innerHTML = "<p class='text-white text-center'>No data available for this zone.</p>";
+                });
+        });
+    </script>
+</body>
+</html>

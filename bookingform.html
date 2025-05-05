@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Payment | Wanderlust Adventures</title>
+    <link rel="icon" href="Images/FAVICON.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        header {
+            background: linear-gradient(135deg, #000000 0%, #434343 100%);
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+            animation: shine 8s infinite linear;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(30deg) translate(-30%, -30%); }
+            100% { transform: rotate(30deg) translate(30%, 30%); }
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-weight: 600;
+            position: relative;
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            font-weight: 500;
+            color: #444;
+        }
+
+        header p {
+            font-weight: 300;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .ticket-info {
+            padding: 25px;
+            border-bottom: 1px solid #eee;
+            background: white;
+        }
+
+        .passenger-management {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #passenger-count {
+            color: #666;
+            font-size: 0.9rem;
+            background: #f5f5f5;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .coach-selection {
+            display: flex;
+            margin: 20px 0;
+            gap: 15px;
+        }
+
+        .coach-option {
+            flex: 1;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .coach-option:hover {
+            border-color: #4b4c52;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(74, 108, 247, 0.1);
+        }
+
+        .coach-option.selected {
+            border-color: #000000;
+            background-color: #f5f8ff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.203);
+        }
+
+        .coach-option h3 {
+            color: #333;
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        .coach-option .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4a6cf7;
+            margin-top: -0.6rem;
+        }
+
+        .coach-option .features {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .payment-section {
+            padding: 25px;
+            background: #fafafa;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            color: #333;
+            margin-top: 2rem;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+            font-size: 1.5rem;
+            color: #4a6cf7;
+        }
+
+        .payment-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .payment-tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .payment-tab:hover {
+            color: #000000;
+        }
+
+        .payment-tab.active {
+            color: #000000;
+            border-bottom-color: #000000;
+        }
+
+        .payment-content {
+            display: none;
+        }
+
+        .payment-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            color: #555;
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4a6cf7;
+            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+            background: white;
+        }
+
+        .card-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .card-row .form-group {
+            flex: 1;
+        }
+
+        .upi-form {
+            text-align: center;
+        }
+
+        .upi-qr {
+            background-color: #f9f9f9;
+            border: 1px dashed #ddd;
+            border-radius: 12px;
+            height: 200px;
+            margin: 20px auto;
+            max-width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .upi-qr:hover {
+            border-color: #4a6cf7;
+            box-shadow: 0 5px 15px rgba(74, 108, 247, 0.1);
+        }
+
+        .upi-id-input {
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        button {
+            background: linear-gradient(135deg, #000000 0%, #434343 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover::after {
+            left: 100%;
+        }
+
+        #add-passenger-btn {
+            width: auto;
+            padding: 10px 20px;
+            margin-left: 0;
+            margin-top: 0;
+            background: linear-gradient(135deg, #000000 0%, #2c2c2c 100%);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary {
+            background-color: #f9f9f9;
+            padding: 25px;
+            border-top: 1px solid #eee;
+        }
+
+        .summary h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .summary h3 i {
+            margin-right: 10px;
+            color: #4a6cf7;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .summary-row.total {
+            border-top: 1px solid #ddd;
+            padding-top: 12px;
+            margin-top: 12px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 450px;
+            max-width: 90%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(0);
+            animation: modalSlideIn 0.4s ease;
+            position: relative;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .success-icon {
+            font-size: 80px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: bounce 1s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        .close-modal {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #000000 0%, #252525 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .close-modal:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 108, 247, 0.3);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .passenger-details-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .passenger-details-row .form-group {
+            flex: 1;
+        }
+
+        .passenger-modal-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 108, 247, 0.3);
+        }
+
+        .added-passengers-section {
+            padding: 15px;
+            margin-top: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        #passengers-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #passengers-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: white;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        #passengers-list li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .remove-passenger {
+            color: #e74c3c;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .remove-passenger:hover {
+            transform: scale(1.2);
+        }
+        
+        .passenger-form {
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+        }
+        
+        .coach-option small {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        
+        .warning-icon {
+            color: #ffc107;
+        }
+        
+        .error-icon {
+            color: #e74c3c;
+        }
+        
+        .input-error {
+            border-color: #e74c3c !important;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important;
+        }
+        
+        .input-success {
+            border-color: #4CAF50 !important;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2) !important;
+        }
+        
+        .validation-icon {
+            position: absolute;
+            right: 15px;
+            top: 38px;
+            display: none;
+            color: #4CAF50;
+        }
+        
+        .required-field::after {
+            content: " *";
+            color: #e74c3c;
+        }
+        
+        #alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 350px;
+            z-index: 1001;
+        }
+        
+        .alert {
+            opacity: 0;
+            transition: all 0.5s ease-in-out;
+            margin-bottom: 15px;
+            transform: translateX(100px);
+        }
+        
+        .alert.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            animation: confetti-fall 5s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .travel-icon {
+            font-size: 1.2rem;
+            margin-right: 8px;
+            color: #4a6cf7;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 25px;
+        }
+
+        .progress-steps::before {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 25px;
+            right: 25px;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            color: #999;
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-number {
+            background: #4a6cf7;
+            color: white;
+            box-shadow: 0 0 0 5px rgba(74, 108, 247, 0.2);
+        }
+
+        .progress-step.active .step-label {
+            color: #4a6cf7;
+        }
+
+        .progress-step.completed .step-number {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .progress-step.completed .step-label {
+            color: #4CAF50;
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 15px;
+            left: 25px;
+            height: 2px;
+            background: #4a6cf7;
+            z-index: 2;
+            transition: width 0.3s ease;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="alert-container"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Trip Payment</h1>
+            <p>Complete your booking to confirm your journey with Wanderlust</p>
+        </header>
+
+
+        <div class="ticket-info">
+            <div class="section-title">
+                <h2>Passenger Details</h2>
+            </div>
+            <div class="passenger-form">
+                <div class="passenger-details-row">
+                    <div class="form-group">
+                        <label for="passenger-name" class="required-field">Full Name</label>
+                        <input type="text" id="passenger-name" placeholder="Enter Full Name" required>
+                        <span class="validation-icon" id="name-icon"><i class="fas fa-check"></i></span>
+                        <div class="error-message" id="passenger-name-error">Please enter passenger name</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="passenger-phone" class="required-field">Phone Number</label>
+                        <input type="tel" id="passenger-phone" placeholder="Enter 10-digit Mobile Number" 
+                               pattern="[0-9]{10}" maxlength="10" required>
+                        <span class="validation-icon" id="phone-icon"><i class="fas fa-check"></i></span>
+                        <div class="error-message" id="passenger-phone-error">Please enter a valid 10-digit phone number</div>
+                    </div>
+                </div>
+                <div class="passenger-details-row">
+                    <div class="form-group">
+                        <label for="passenger-age" class="required-field">Age</label>
+                        <input type="number" id="passenger-age" placeholder="Age" min="1" max="120" required>
+                        <span class="validation-icon" id="age-icon"><i class="fas fa-check"></i></span>
+                        <div class="error-message" id="passenger-age-error">Please enter a valid age (1-120)</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="passenger-gender" class="required-field">Gender</label>
+                        <select id="passenger-gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div class="error-message" id="passenger-gender-error">Please select gender</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="passenger-email">Email (Optional)</label>
+                    <input type="email" id="passenger-email" placeholder="Enter Email Address">
+                    <div class="error-message" id="passenger-email-error">Please enter a valid email address</div>
+                </div>
+            </div>
+
+            <div class="passenger-management">
+                <button id="add-passenger-btn" class="btn-dark">
+                    <i class="fas fa-user-plus"></i> Add Passenger
+                </button>
+                <span id="passenger-count">1 passenger</span>
+            </div>
+            <div class="added-passengers-section">
+                <h3><i class="fas fa-list" style="color: #000000;"></i>&nbsp&nbspAdded Passengers</h3>
+                <ul id="passengers-list"></ul>
+            </div>
+            
+            <div class="section-title">
+                <h3>Select Your Coach</h3>&nbsp;&nbsp;&nbsp;
+                <i class="fas fa-train" style="color: black;"></i>
+            </div>
+            <div class="coach-selection">
+                <div class="coach-option" data-price="12500" data-type="3AC">
+                    <h3>3AC</h3>
+                    <div class="price">₹12,500</div>
+                    <div class="features">
+                        <p>3-tier AC Coach</p>
+                    </div>
+                </div>
+                <div class="coach-option" data-price="10500" data-type="2AC">
+                    <h3>Sleeper Coach</h3>
+                    <div class="price">₹10,500</div>
+                    <div class="features">
+                        <p>Sleeper Coach</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-section">
+            <div class="section-title">
+                <h2>Payment Method</h2>
+            </div>
+            <div class="payment-tabs">
+                <div class="payment-tab active" data-tab="card">
+                    <i class="fas fa-credit-card"></i> Credit/Debit Card
+                </div>
+                <div class="payment-tab" data-tab="upi">
+                    <i class="fas fa-mobile-alt"></i> UPI Payment
+                </div>
+            </div>
+
+            <div class="payment-content active" id="card-payment">
+                <form id="card-form">
+                    <div class="form-group">
+                        <label for="card-number" class="required-field">Card Number</label>
+                        <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+                        <span class="validation-icon" id="card-number-icon"><i class="fas fa-check"></i></span>
+                        <div class="error-message" id="card-number-error">Please enter a valid card number</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cardholder" class="required-field">Cardholder Name</label>
+                        <input type="text" id="cardholder" placeholder="John Doe">
+                        <span class="validation-icon" id="cardholder-icon"><i class="fas fa-check"></i></span>
+                        <div class="error-message" id="cardholder-error">Please enter the cardholder name</div>
+                    </div>
+
+                    <div class="card-row">
+                        <div class="form-group">
+                            <label for="expiry" class="required-field">Expiry Date</label>
+                            <input type="text" id="expiry" placeholder="MM/YY" maxlength="5">
+                            <span class="validation-icon" id="expiry-icon"><i class="fas fa-check"></i></span>
+                            <div class="error-message" id="expiry-error">Please enter a valid expiry date</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv" class="required-field">CVV</label>
+                            <input type="password" id="cvv" placeholder="123" maxlength="3">
+                            <span class="validation-icon" id="cvv-icon"><i class="fas fa-check"></i></span>
+                            <div class="error-message" id="cvv-error">Please enter a valid CVV</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="payment-content" id="upi-payment">
+                <div class="upi-form">
+                    <p>Scan the QR code using any UPI app or enter your UPI ID</p>
+                    <div class="upi-qr">
+                        <img src="/Images/qr_img.png" style="width: 90%;">
+                    </div>
+                    <div class="form-group upi-id-input">
+                        <label for="upi-id" class="required-field">UPI ID</label>
+                        <input type="text" id="upi-id" placeholder="username@upi">
+                        <span class="validation-icon" id="upi-icon"><i class="fas fa-check"></i></span>
+                        <div class="error-message" id="upi-error">Please enter a valid UPI ID</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary">
+            <h3>Payment Summary</h3>
+            <div class="summary-row">
+                <span>Ticket Price (₹<span id="per-passenger-price">0</span> × <span id="display-passenger-count">1</span>)</span>
+                <span id="ticket-price">₹0</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total Amount</span>
+                <span id="total-amount">₹0</span>
+            </div>
+
+            <button id="payment-button"><i class="fas fa-lock"></i> Proceed to Pay</button>
+        </div>
+    </div>
+
+    <!-- Add Passenger Modal -->
+    <div class="modal" id="add-passenger-modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-user-plus" style="color: black;"></i> Add New Passenger</h2>
+            <form id="new-passenger-form">
+                <div class="form-group">
+                    <label for="new-passenger-name" class="required-field">Full Name</label>
+                    <input type="text" id="new-passenger-name" placeholder="Enter Full Name" required>
+                    <div class="error-message" id="new-passenger-name-error">Please enter passenger name</div>
+                </div>
+                <div class="passenger-details-row">
+                    <div class="form-group">
+                        <label for="new-passenger-age" class="required-field">Age</label>
+                        <input type="number" id="new-passenger-age" placeholder="Age" min="1" max="120" required>
+                        <div class="error-message" id="new-passenger-age-error">Please enter a valid age (1-120)</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-passenger-gender" class="required-field">Gender</label>
+                        <select id="new-passenger-gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div class="error-message" id="new-passenger-gender-error">Please select gender</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="new-passenger-relation">Relation</label>
+                    <select id="new-passenger-relation">
+                        <option value="">Select Relation</option>
+                        <option value="self">Self</option>
+                        <option value="spouse">Spouse</option>
+                        <option value="child">Child</option>
+                        <option value="parent">Parent</option>
+                        <option value="sibling">Sibling</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="passenger-modal-actions">
+                    <button type="button" id="cancel-passenger-btn" class="btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" id="save-passenger-btn" class="btn-primary">
+                        <i class="fas fa-save" style="color: white;"></i> Add Passenger
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Success Modal -->
+    <div class="modal" id="success-modal">
+        <div class="modal-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Payment Successful!</h2>
+            <p>Your booking has been confirmed. Ticket details have been sent to your email.</p>
+            <p id="booking-reference">Booking Reference: <strong>TRN12345678</strong></p><br>
+            <div class="contact-info">
+                <strong><i class="fas fa-headset"></i> For any queries, please contact:</strong>
+                <div><i class="fas fa-phone"></i> Phone: 8591289068</div>
+                <div><i class="fas fa-envelope"></i> Email: wanderlust@gmail.com</div>
+            </div>
+            <button class="close-modal"><i class="fas fa-thumbs-up"></i> Got it, thanks!</button>
+        </div>
+    </div>
+
+    <script>
+        // Alert system
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alert-container');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            
+            const icon = type === 'danger' ? '<i class="fas fa-exclamation-circle error-icon"></i>' : 
+                          '<i class="fas fa-check-circle"></i>';
+            alert.innerHTML = `${icon} ${message}`;
+            
+            alertContainer.appendChild(alert);
+            
+            // Trigger animation
+            setTimeout(() => {
+                alert.classList.add('show');
+            }, 10);
+            
+            // Remove alert after 5 seconds
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => {
+                    alert.remove();
+                }, 500);
+            }, 5000);
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#4a6cf7', '#4CAF50', '#ffc107', '#e74c3c', '#9b59b6'];
+            const container = document.querySelector('.modal-content');
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = confetti.style.width;
+                container.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Coach selection
+        const coachOptions = document.querySelectorAll('.coach-option');
+        const ticketPriceElement = document.getElementById('ticket-price');
+        const totalAmountElement = document.getElementById('total-amount');
+        const perPassengerPriceElement = document.getElementById('per-passenger-price');
+        const displayPassengerCountElement = document.getElementById('display-passenger-count');
+        let selectedCoachPrice = 0;
+        let selectedCoachType = '';
+        let passengerCount = 1; // Start with 1 for the primary passenger
+        let passengers = [];
+
+        coachOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from all options
+                coachOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                
+                // Update price
+                selectedCoachPrice = parseInt(this.getAttribute('data-price'));
+                selectedCoachType = this.getAttribute('data-type');
+                updatePriceSummary();
+            });
+        });
+
+        function updatePriceSummary() {
+            if (selectedCoachPrice > 0) {
+                perPassengerPriceElement.textContent = selectedCoachPrice.toLocaleString('en-IN');
+                displayPassengerCountElement.textContent = passengerCount;
+                
+                const totalTicketPrice = selectedCoachPrice * passengerCount;
+                ticketPriceElement.textContent = '₹' + totalTicketPrice.toLocaleString('en-IN');
+                totalAmountElement.textContent = '₹' + (totalTicketPrice).toLocaleString('en-IN');
+            } else {
+                perPassengerPriceElement.textContent = '0';
+                displayPassengerCountElement.textContent = '0';
+                ticketPriceElement.textContent = '₹0';
+                totalAmountElement.textContent = '₹0';
+            }
+        }
+
+        // Payment tab switching
+        const paymentTabs = document.querySelectorAll('.payment-tab');
+        const paymentContents = document.querySelectorAll('.payment-content');
+
+        paymentTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and contents
+                paymentTabs.forEach(t => t.classList.remove('active'));
+                paymentContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                document.getElementById(tabId + '-payment').classList.add('active');
+            });
+        });
+
+        // Card number formatting
+        const cardNumberInput = document.getElementById('card-number');
+        cardNumberInput.addEventListener('input', function(e) {
+            let value = e.target.value;
+            
+            // Remove all non-digit characters
+            value = value.replace(/\D/g, '');
+            
+            // Add space after every 4 digits
+            value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+            
+            // Update the input value
+            e.target.value = value;
+            
+            // Validate and show/hide validation icon
+            validateCardNumber(value);
+        });
+
+        function validateCardNumber(value) {
+            const cardNumber = value.replace(/\s/g, '');
+            const isValid = cardNumber.length === 16 && /^\d+$/.test(cardNumber);
+            const icon = document.getElementById('card-number-icon');
+            
+            if (value.trim() === '') {
+                icon.style.display = 'none';
+                document.getElementById('card-number-error').style.display = 'none';
+                cardNumberInput.classList.remove('input-error', 'input-success');
+            } else if (isValid) {
+                icon.style.display = 'block';
+                icon.innerHTML = '<i class="fas fa-check"></i>';
+                icon.style.color = '#4CAF50';
+                document.getElementById('card-number-error').style.display = 'none';
+                cardNumberInput.classList.remove('input-error');
+                cardNumberInput.classList.add('input-success');
+            } else {
+                icon.style.display = 'block';
+                icon.innerHTML = '<i class="fas fa-times"></i>';
+                icon.style.color = '#e74c3c';
+                document.getElementById('card-number-error').style.display = 'block';
+                cardNumberInput.classList.remove('input-success');
+                cardNumberInput.classList.add('input-error');
+            }
+            
+            return isValid;
+        }
+
+        // Expiry date formatting and validation
+        const expiryInput = document.getElementById('expiry');
+        expiryInput.addEventListener('input', function(e) {
+            let value = e.target.value;
+            
+            // Remove all non-digit characters
+            value = value.replace(/\D/g, '');
+            
+            // Add slash after month
+            if (value.length > 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            
+            // Update the input value
+            e.target.value = value;
+            
+            // Validate expiry date
+            validateExpiryDate(value);
+        });
+
+        function validateExpiryDate(value) {
+            const result = validateExpiry(value);
+            const icon = document.getElementById('expiry-icon');
+            const errorElement = document.getElementById('expiry-error');
+            
+            if (value.trim() === '') {
+                icon.style.display = 'none';
+                errorElement.style.display = 'none';
+                expiryInput.classList.remove('input-error', 'input-success');
+                return false;
+            }
+            
+            if (!result.valid) {
+                icon.style.display = 'block';
+                icon.innerHTML = '<i class="fas fa-times"></i>';
+                icon.style.color = '#e74c3c';
+                errorElement.style.display = 'block';
+                expiryInput.classList.remove('input-success');
+                expiryInput.classList.add('input-error');
+                
+                if (result.error === "expired") {
+                    errorElement.textContent = 'Card is expired';
+                } else {
+                    errorElement.textContent = 'Invalid date format (MM/YY)';
+                }
+                
+                return false;
+            } else {
+                icon.style.display = 'block';
+                icon.innerHTML = '<i class="fas fa-check"></i>';
+                icon.style.color = '#4CAF50';
+                errorElement.style.display = 'none';
+                expiryInput.classList.remove('input-error');
+                expiryInput.classList.add('input-success');
+                return true;
+            }
+        }
+
+        // Improved card expiry validation function
+        function validateExpiry(expiry) {
+            // Check format (MM/YY)
+            if (!/^\d{2}\/\d{2}$/.test(expiry)) {
+                return { valid: false, error: "format" };
+            }
+            
+            // Extract month and year
+            const [month, year] = expiry.split('/').map(part => parseInt(part, 10));
+            
+            // Validate month (1-12)
+            if (month < 1 || month > 12) {
+                return { valid: false, error: "format" };
+            }
+            
+            // Get current date
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear() % 100; // Last two digits of year
+            const currentMonth = currentDate.getMonth() + 1; // getMonth() returns 0-11
+            
+            // Check if card is expired
+            if (year < currentYear || (year === currentYear && month < currentMonth)) {
+                return { valid: false, error: "expired" };
+            }
+            
+            return { valid: true, error: null };
+        }
+
+        // CVV validation
+        const cvvInput = document.getElementById('cvv');
+        cvvInput.addEventListener('input', function() {
+            validateCVV(this.value);
+        });
+
+        function validateCVV(value) {
+            const isValid = value.length === 3 && /^\d+$/.test(value);
+            const icon = document.getElementById('cvv-icon');
+            
+            if (value.trim() === '') {
+                icon.style.display = 'none';
+                document.getElementById('cvv-error').style.display = 'none';
+                cvvInput.classList.remove('input-error', 'input-success');
+            } else if (isValid) {
+                icon.style.display = 'block';
+                icon.innerHTML = '<i class="fas fa-check"></i>';
+                icon.style.color = '#4CAF50';
+                document.getElementById('cvv-error').style.display = 'none';
+                cvvInput.classList.remove('input-error');
+                cvvInput.classList.add('input-success');
+            } else {
+                icon.style.display = 'block';
+                icon.innerHTML = '<i class="fas fa-times"></i>';
+                icon.style.color = '#e74c3c';
+                document.getElementById('cvv-error').style.display = 'block';
+                cvvInput.classList.remove('input-success');
+                cvvInput.classList.add('input-error');
+            }
+            
+            return isValid;
+        }
+
+        // Cardholder name validation
+        const cardholderInput = document.getElementById('cardholder');
+        cardholderInput.addEventListener('input', function() {
+            validateCardholderName(this.value);
+        });
+
+        function validateCardholderName(value) {
+            const isValid = value.trim().length > 0;
+            const icon = document.getElementById('cardholder-icon');
+            
+            if (value.trim() === '') {
+                icon.style.display = 'none';
+                document.getElementById('cardholder-error').style.display = 'none';
+                cardholderInput.classList.remove('input-error', 'input-success');
+            } else if (isValid) {
+                icon.style.display = 'block';
+                icon.innerHTML = '<i class="fas fa-check"></i>';
+                icon.style.color = '#4CAF50';
+                document.getElementById('cardholder-error').style.display = 'none';
+                cardholderInput.classList.remove('input-error');
+                cardholderInput.classList.add('input-success');
+            } else {
+                icon.style.display = 'block';
+                icon.innerHTML = '<i class="fas fa-times"></i>';
+                icon.style.color = '#e74c3c';
+                document.getElementById('cardholder-error').style.display = 'block';
+                cardholderInput.classList.remove('input-success');
+                cardholderInput.classList.add('input-error');
+            }
+            
+            return isValid;
+        }
+
+        // UPI ID validation
+        const upiIdInput = document.getElementById('upi-id');
+        upiIdInput.addEventListener('input', function() {
+            validateUPIId(this.value);
+        });
+
+        function validateUPIId(value) {
+            const isValid = value.includes('@') && value.length > 5;
+            const icon = document.getElementById('upi-icon');
+            
+            if (value.trim() === '') {
+                icon.style.display = 'none';
+                document.getElementById('upi-error').style.display = 'none';
+                upiIdInput.classList.remove('input-error', 'input-success');
+            } else if (isValid) {
+                icon.style.display = 'block';
+                icon.innerHTML = '<i class="fas fa-check"></i>';
+                icon.style.color = '#4CAF50';
+                document.getElementById('upi-error').style.display = 'none';
+                upiIdInput.classList.remove('input-error');
+                upiIdInput.classList.add('input-success');
+            } else {
+                icon.style.display = 'block';
+                icon.innerHTML = '<i class="fas fa-times"></i>';
+                icon.style.color = '#e74c3c';
+                document.getElementById('upi-error').style.display = 'block';
+                upiIdInput.classList.remove('input-success');
+                upiIdInput.classList.add('input-error');
+            }
+            
+            return isValid;
+        }
+
+        // Form validation
+        const paymentButton = document.getElementById('payment-button');
+        const successModal = document.getElementById('success-modal');
+        const closeModalButton = document.querySelector('.close-modal');
+        
+        function validateCardPayment() {
+            let isValid = true;
+            
+            // Card number validation
+            const cardNumber = cardNumberInput.value.replace(/\s/g, '');
+            if (!validateCardNumber(cardNumber)) {
+                isValid = false;
+            }
+            
+            // Cardholder name validation
+            const cardholder = cardholderInput.value.trim();
+            if (!validateCardholderName(cardholder)) {
+                isValid = false;
+            }
+            
+            // Expiry date validation
+            const expiry = expiryInput.value;
+            if (!validateExpiryDate(expiry)) {
+                isValid = false;
+            }
+            
+            // CVV validation
+            const cvv = cvvInput.value;
+            if (!validateCVV(cvv)) {
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        function validateUpiPayment() {
+            const upiId = upiIdInput.value.trim();
+            return validateUPIId(upiId);
+        }
+
+        // Passenger management
+        const addPassengerModal = document.getElementById('add-passenger-modal');
+        const addPassengerBtn = document.getElementById('add-passenger-btn');
+        const cancelPassengerBtn = document.getElementById('cancel-passenger-btn');
+        const passengersList = document.getElementById('passengers-list');
+        const newPassengerForm = document.getElementById('new-passenger-form');
+        const passengerCountElement = document.getElementById('passenger-count');
+
+        // Open modal when Add Passenger is clicked
+        addPassengerBtn.addEventListener('click', function() {
+            // Reset form
+            newPassengerForm.reset();
+            addPassengerModal.style.display = 'flex';
+        });
+
+        // Close modal when Cancel is clicked
+        cancelPassengerBtn.addEventListener('click', function() {
+            addPassengerModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === addPassengerModal) {
+                addPassengerModal.style.display = 'none';
+            }
+            if (event.target === successModal) {
+                successModal.style.display = 'none';
+            }
+        });
+
+        // Validate primary passenger details
+        function validatePrimaryPassenger() {
+            let isValid = true;
+            
+            // Name validation
+            const name = document.getElementById('passenger-name').value.trim();
+            if (name === '') {
+                document.getElementById('passenger-name-error').style.display = 'block';
+                document.getElementById('passenger-name').classList.add('input-error');
+                isValid = false;
+            } else {
+                document.getElementById('passenger-name-error').style.display = 'none';
+                document.getElementById('passenger-name').classList.remove('input-error');
+            }
+            
+            // Phone validation
+            const phone = document.getElementById('passenger-phone').value.trim();
+            if (!/^\d{10}$/.test(phone)) {
+                document.getElementById('passenger-phone-error').style.display = 'block';
+                document.getElementById('passenger-phone').classList.add('input-error');
+                isValid = false;
+            } else {
+                document.getElementById('passenger-phone-error').style.display = 'none';
+                document.getElementById('passenger-phone').classList.remove('input-error');
+            }
+            
+            // Age validation
+            const age = document.getElementById('passenger-age').value;
+            if (!validateAge(age)) {
+                document.getElementById('passenger-age-error').style.display = 'block';
+                document.getElementById('passenger-age').classList.add('input-error');
+                isValid = false;
+            } else {
+                document.getElementById('passenger-age-error').style.display = 'none';
+                document.getElementById('passenger-age').classList.remove('input-error');
+            }
+            
+            // Gender validation
+            const gender = document.getElementById('passenger-gender').value;
+            if (gender === '') {
+                document.getElementById('passenger-gender-error').style.display = 'block';
+                document.getElementById('passenger-gender').classList.add('input-error');
+                isValid = false;
+            } else {
+                document.getElementById('passenger-gender-error').style.display = 'none';
+                document.getElementById('passenger-gender').classList.remove('input-error');
+            }
+            
+            // Email validation (optional)
+            const email = document.getElementById('passenger-email').value.trim();
+            if (email !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById('passenger-email-error').style.display = 'block';
+                document.getElementById('passenger-email').classList.add('input-error');
+                isValid = false;
+            } else {
+                document.getElementById('passenger-email-error').style.display = 'none';
+                document.getElementById('passenger-email').classList.remove('input-error');
+            }
+            
+            return isValid;
+        }
+
+        // Age validation function
+        function validateAge(age) {
+            // Convert to integer
+            const ageNum = parseInt(age);
+            
+            // Check if age is a valid number, within reasonable range (1-120)
+            if (isNaN(ageNum)) return false;
+            if (ageNum < 1 || ageNum > 120) return false;
+            
+            return true;
+        }
+
+        // Update passengers list
+        function updatePassengersList() {
+            // Clear existing list completely
+            passengersList.innerHTML = '';
+
+            // Populate list with current passengers
+            passengers.forEach((passenger) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span><i class="fas fa-user travel-icon"></i> ${passenger.name} (${passenger.age} ${passenger.gender}) - ${passenger.relation}</span>
+                    <span class="remove-passenger" data-id="${passenger.id}" title="Remove passenger"><i class="fas fa-times"></i></span>
+                `;
+                passengersList.appendChild(li);
+            });
+
+            // Update passenger count (1 primary + added passengers)
+            passengerCount = 1 + passengers.length;
+            passengerCountElement.textContent = `${passengerCount} passenger${passengerCount !== 1 ? 's' : ''}`;
+            displayPassengerCountElement.textContent = passengerCount;
+            
+            // Update price summary
+            updatePriceSummary();
+
+            // Add remove functionality to remove buttons
+            document.querySelectorAll('.remove-passenger').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const passengerId = this.getAttribute('data-id');
+                    passengers = passengers.filter(p => p.id !== parseInt(passengerId));
+                    updatePassengersList();
+                    showAlert('Passenger removed', 'success');
+                });
+            });
+        }
+
+        // Handle new passenger form submission
+        newPassengerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Validate form
+            const name = document.getElementById('new-passenger-name').value.trim();
+            const age = document.getElementById('new-passenger-age').value;
+            const gender = document.getElementById('new-passenger-gender').value;
+            const relation = document.getElementById('new-passenger-relation').value || 'self';
+
+            // Validate name
+            if (name === '') {
+                document.getElementById('new-passenger-name-error').style.display = 'block';
+                document.getElementById('new-passenger-name').classList.add('input-error');
+                document.getElementById('new-passenger-name').focus();
+                return;
+            } else {
+                document.getElementById('new-passenger-name-error').style.display = 'none';
+                document.getElementById('new-passenger-name').classList.remove('input-error');
+            }
+
+            // Validate age
+            if (!validateAge(age)) {
+                document.getElementById('new-passenger-age-error').style.display = 'block';
+                document.getElementById('new-passenger-age').classList.add('input-error');
+                document.getElementById('new-passenger-age').focus();
+                return;
+            } else {
+                document.getElementById('new-passenger-age-error').style.display = 'none';
+                document.getElementById('new-passenger-age').classList.remove('input-error');
+            }
+
+            // Validate gender
+            if (gender === '') {
+                document.getElementById('new-passenger-gender-error').style.display = 'block';
+                document.getElementById('new-passenger-gender').classList.add('input-error');
+                document.getElementById('new-passenger-gender').focus();
+                return;
+            } else {
+                document.getElementById('new-passenger-gender-error').style.display = 'none';
+                document.getElementById('new-passenger-gender').classList.remove('input-error');
+            }
+
+            // Check passenger limit (max 6)
+            if (passengers.length >= 5) { // 1 primary + 5 additional
+                showAlert('Maximum 6 passengers allowed (including primary passenger)', 'danger');
+                return;
+            }
+
+            // Create passenger object
+            const newPassenger = {
+                id: Date.now(), // Unique identifier
+                name,
+                age,
+                gender,
+                relation
+            };
+
+            // Add to passengers array
+            passengers.push(newPassenger);
+
+            // Update passengers list in UI
+            updatePassengersList();
+            showAlert('Passenger added successfully', 'success');
+
+            // Close modal
+            addPassengerModal.style.display = 'none';
+        });
+
+        // Handle payment button click
+        paymentButton.addEventListener('click', function() {
+            // 1. Validate primary passenger details
+            if (!validatePrimaryPassenger()) {
+                showAlert('Please complete all required passenger details', 'danger');
+                return;
+            }
+
+            // 2. Check if at least one passenger is added (including primary)
+            if (passengers.length === 0) {
+                // Add primary passenger to the list
+                passengers.push({
+                    id: Date.now(),
+                    name: document.getElementById('passenger-name').value.trim(),
+                    age: document.getElementById('passenger-age').value,
+                    gender: document.getElementById('passenger-gender').value,
+                    relation: 'self'
+                });
+                updatePassengersList();
+            }
+            
+            // 3. Check if a coach is selected
+            if (selectedCoachPrice === 0) {
+                showAlert('Please select a coach type first', 'danger');
+                return;
+            }
+            
+            // 4. Validate payment method
+            const activePaymentMethod = document.querySelector('.payment-tab.active').getAttribute('data-tab');
+            
+            let paymentValid = false;
+            if (activePaymentMethod === 'card') {
+                paymentValid = validateCardPayment();
+            } else if (activePaymentMethod === 'upi') {
+                paymentValid = validateUpiPayment();
+            }
+            
+            if (!paymentValid) {
+                showAlert('Please complete all required payment details', 'danger');
+                return;
+            }
+            
+            // 5. If all validations pass, show success modal
+            const bookingRef = 'TRN' + Math.floor(10000000 + Math.random() * 90000000);
+            document.getElementById('booking-reference').innerHTML = 'Booking Reference: <strong>' + bookingRef + '</strong>';
+            
+            // Show success modal
+            successModal.style.display = 'flex';
+            createConfetti();
+            
+            // Update progress steps
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
+                step.classList.remove('active');
+                if (index < 2) {
+                    step.classList.add('completed');
+                } else {
+                    step.classList.add('active');
+                }
+            });
+            document.querySelector('.progress-bar').style.width = '100%';
+        });
+
+        // Close success modal
+        closeModalButton.addEventListener('click', function() {
+            successModal.style.display = 'none';
+            
+            // Reset form after successful payment
+            document.querySelector('form').reset();
+            passengers = [];
+            updatePassengersList();
+            coachOptions.forEach(opt => opt.classList.remove('selected'));
+            selectedCoachPrice = 0;
+            updatePriceSummary();
+            
+            // Show confirmation message
+            showAlert('Booking completed successfully!', 'success');
+        });
+
+        // Initialize the page with the first coach option selected
+        if (coachOptions.length > 0) {
+            coachOptions[0].click();
+        }
+
+        // Real-time validation for primary passenger fields
+        document.getElementById('passenger-name').addEventListener('input', function() {
+            const value = this.value.trim();
+            if (value === '') {
+                document.getElementById('passenger-name-error').style.display = 'block';
+                this.classList.add('input-error');
+            } else {
+                document.getElementById('passenger-name-error').style.display = 'none';
+                this.classList.remove('input-error');
+            }
+        });
+
+        document.getElementById('passenger-phone').addEventListener('input', function() {
+            const value = this.value.trim();
+            if (!/^\d{10}$/.test(value)) {
+                document.getElementById('passenger-phone-error').style.display = 'block';
+                this.classList.add('input-error');
+            } else {
+                document.getElementById('passenger-phone-error').style.display = 'none';
+                this.classList.remove('input-error');
+            }
+        });
+
+        document.getElementById('passenger-age').addEventListener('input', function() {
+            const value = this.value;
+            if (!validateAge(value)) {
+                document.getElementById('passenger-age-error').style.display = 'block';
+                this.classList.add('input-error');
+            } else {
+                document.getElementById('passenger-age-error').style.display = 'none';
+                this.classList.remove('input-error');
+            }
+        });
+
+        document.getElementById('passenger-gender').addEventListener('change', function() {
+            const value = this.value;
+            if (value === '') {
+                document.getElementById('passenger-gender-error').style.display = 'block';
+                this.classList.add('input-error');
+            } else {
+                document.getElementById('passenger-gender-error').style.display = 'none';
+                this.classList.remove('input-error');
+            }
+        });
+
+        document.getElementById('passenger-email').addEventListener('input', function() {
+            const value = this.value.trim();
+            if (value !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                document.getElementById('passenger-email-error').style.display = 'block';
+                this.classList.add('input-error');
+            } else {
+                document.getElementById('passenger-email-error').style.display = 'none';
+                this.classList.remove('input-error');
+            }
+        });
+
+        // Add animation to container on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

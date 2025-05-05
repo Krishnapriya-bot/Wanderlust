@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Reviews</title>
+  <style>
+    :root {
+      --primary-color: #4a90e2;
+      --secondary-color: #f8f9fa;
+      --text-color: #333;
+      --border-color: #ddd;
+      --star-color: #ffc107;
+      --star-inactive: #e4e5e9;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: white;
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: black;
+    }
+
+    .rating-summary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .average-rating {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .big-rating {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .rating-count {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .rating-bars {
+      flex: 0 0 300px;
+    }
+
+    .rating-bar {
+      display: flex;
+      align-items: center;
+      margin: 5px 0;
+    }
+
+    .star-level {
+      width: 60px;
+      text-align: right;
+      margin-right: 10px;
+    }
+
+    .bar-container {
+      flex: 1;
+      background-color: var(--star-inactive);
+      height: 8px;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    .bar-fill {
+      background-color: var(--star-color);
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    .bar-percent {
+      width: 40px;
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .reviews-container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+      padding: 20px;
+    }
+
+    .reviews-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .review-search {
+      display: flex;
+      border: 1px solid white;
+      border-radius: 20px;
+      padding: 8px 15px;
+      background-color: white;
+    }
+
+    .review-search input {
+      border: none;
+      outline: none;
+      padding-left: 5px;
+      width: 200px;
+    }
+
+    .review-sort {
+      position: relative;
+    }
+
+    .sort-button {
+      display: flex;
+      align-items: center;
+      background: none;
+      border: 1px solid rgb(0, 0, 0);
+      border-radius: 20px;
+      padding: 8px 15px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .sort-dropdown {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background-color: white;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      width: 170px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 100;
+      display: none;
+    }
+
+    .sort-dropdown.active {
+      display: block;
+    }
+
+    .sort-dropdown ul {
+      list-style: none;
+    }
+
+    .sort-dropdown li {
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    .sort-dropdown li:hover {
+      background-color: var(--secondary-color);
+    }
+
+    .reviews-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .review-item {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 20px;
+    }
+
+    .review-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .reviewer-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: black;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .reviewer-name {
+      font-weight: bold;
+    }
+
+    .reviewer-date {
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .review-rating {
+      display: flex;
+      margin: 5px 0;
+      align-items: center;
+    }
+
+    .star {
+      color: var(--star-color);
+      font-size: 1.2rem;
+      margin-right: 3px;
+    }
+
+    .review-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .review-text {
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .review-photos {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .review-photo {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .write-review {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+      padding: 20px;
+      position: sticky;
+      top: 20px;
+    }
+
+    .write-review h2 {
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      color: black;
+    }
+
+    .review-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .rating-form-group {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .star-rating {
+      display: flex;
+      flex-direction: row-reverse;
+      gap: 5px;
+    }
+
+    .star-rating input {
+      display: none;
+    }
+
+    .star-rating label {
+      font-size: 1.5rem;
+      color: var(--star-inactive);
+      cursor: pointer;
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover ~ label,
+    .star-rating input:checked ~ label {
+      color: var(--star-color);
+    }
+
+    input[type="text"],
+    textarea {
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .file-input {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .file-input-button {
+      background-color: var(--secondary-color);
+      border: 1px dashed var(--border-color);
+      border-radius: 4px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .file-input-button:hover {
+      background-color: #f0f0f0;
+    }
+
+    .file-input input[type="file"] {
+      display: none;
+    }
+
+    .preview-images {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .preview-image-container {
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+
+    .preview-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .remove-image {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: white;
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .submit-button {
+      background-color: black;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .submit-button:hover {
+      background-color: #3a7ac8;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      max-height: 90%;
+    }
+
+    .modal-image {
+      max-width: 100%;
+      max-height: 90vh;
+      border-radius: 8px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 5px;
+    }
+
+    .pagination-button {
+      border: 1px solid var(--border-color);
+      background-color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .pagination-button.active {
+      background-color: black;
+      color: white;
+    }
+
+    .pagination-button:hover:not(.active) {
+      background-color: var(--secondary-color);
+    }
+
+    .no-reviews {
+      text-align: center;
+      padding: 40px 0;
+      color: #666;
+    }
+
+    .submission-success {
+      background-color: #e6f7e6;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Customer Reviews</h1>
+    </header>
+
+    <div class="main-content">
+      <div class="reviews-container">
+        <div class="submission-success">
+          Your review has been submitted successfully. Thank you for your feedback!
+        </div>
+        <div class="reviews-header">
+          <div class="review-sort">
+            <button class="sort-button" id="sort-button">
+              Sort by: Most Recent
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#666" viewBox="0 0 16 16">
+                <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+              </svg>
+            </button>
+            <div class="sort-dropdown" id="sort-dropdown">
+              <ul>
+                <li data-sort="recent">Most Recent</li>
+                <li data-sort="highest">Highest Rating</li>
+                <li data-sort="lowest">Lowest Rating</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="reviews-list" id="reviews-list">
+          <!-- Reviews will be loaded here -->
+        </div>
+
+        <div class="pagination" id="pagination">
+          <!-- Pagination will be added here -->
+        </div>
+      </div>
+
+      <div class="write-review">
+        <h2>Write a Review</h2>
+        <form class="review-form" id="review-form">
+          <div class="rating-form-group">
+            <label for="review-rating">Rating</label>
+            <div class="star-rating">
+              <input type="radio" id="star5" name="rating" value="5">
+              <label for="star5">★</label>
+              <input type="radio" id="star4" name="rating" value="4">
+              <label for="star4">★</label>
+              <input type="radio" id="star3" name="rating" value="3">
+              <label for="star3">★</label>
+              <input type="radio" id="star2" name="rating" value="2">
+              <label for="star2">★</label>
+              <input type="radio" id="star1" name="rating" value="1">
+              <label for="star1">★</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="review-title">Review Title</label>
+            <input type="text" id="review-title" name="title" placeholder="Summarize your experience">
+          </div>
+
+          <div class="form-group">
+            <label for="review-content">Your Review</label>
+            <textarea id="review-content" name="content" placeholder="What did you like or dislike? What did you use this product for?"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Add Photos</label>
+            <div class="file-input">
+              <label class="file-input-button" for="review-photos">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#666" viewBox="0 0 16 16">
+                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                  <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                </svg>
+                <div>Click to upload photos</div>
+                <div style="font-size: 0.8rem; color: #666;">jpg, png, gif (max 5MB)</div>
+              </label>
+              <input type="file" id="review-photos" accept="image/*" multiple>
+              <div class="preview-images" id="preview-images"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reviewer-name">Your Name</label>
+            <input type="text" id="reviewer-name" name="name" placeholder="Enter your name">
+          </div>
+
+          <button type="submit" class="submit-button">Submit Review</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="image-modal">
+    <div class="modal-close" id="modal-close">×</div>
+    <div class="modal-content">
+      <img src="" class="modal-image" id="modal-image">
+    </div>
+  </div>
+
+  <script>
+    // Sample data for initial reviews
+    const sampleReviews = [
+      {
+        id: 1,
+        name: "Atharva",
+        date: "March 15, 2025",
+        rating: 5,
+        title: "Awesome",
+        content: "Had an amazing trip to Manali, thanks to the excellent planning by our tour organizer! Everything was smooth—from transportation to hotel stay and sightseeing. The itinerary was well-balanced, covering Solang Valley, Hadimba Temple, and Mall Road without feeling rushed. The hotel was clean, cozy, and had a breathtaking mountain view.",
+        photos: ["/Images/man.jpg", "/Images/manali.jpg"]
+      },
+      {
+        id: 2,
+        name: "Sarah T.",
+        date: "March 10, 2025",
+        rating: 4,
+        title: "Incredible Experience",
+        content: "​I had an unforgettable trip to Meghalaya, thanks to the exceptional planning by the organizer. Thank you WanderLust",
+        photos: ["/Images/sarah.jpg"]
+      },
+      {
+        id: 4,
+        name: "Priya",
+        date: "January 20, 2025",
+        rating: 5,
+        title: "Amazing",
+        content: "I recently visited Manali, and my experience was absolutely fantastic! The trip was well-organized, the accommodation was comfortable. The tour organizer did a great job arranging everything seamlessly. From transportation to itinerary planning, everything was well-coordinated. The hotel we stayed at was clean, cozy, and offered a beautiful view of the mountains. The serene beauty of Solang Valley, every moment was picture-perfect. Mall Road was lively and great for shopping and trying local delicacies.",
+        photos: ["/Images/priya1.jpg","/Images/priya2.jpg","/Images/priya3.jpg"]
+      },
+      {
+        id: 3,
+        name: "David",
+        date: "February 28, 2025",
+        rating: 5,
+        title: "Smooth Booking!",
+        content: "I had an amazing experience booking my Manali trip through this website. The prices were reasonable, and the customer service was excellent. Everything was well-planned, from the hotel to the local sightseeing. Will definitely use this site again!",
+      },
+      {
+        id: 5,
+        name: "Sreeyesh V.",
+        date: "February 15, 2025",
+        rating: 3,
+        title: "Great",
+        content: "My trip to Kerala was an unforgettable experience! The lush green landscapes, serene backwaters, and beautiful beaches made it a perfect getaway. One of the highlights was witnessing Theyyam, a mesmerizing traditional performance filled with vibrant colors and deep cultural significance. However, the hotel stay was disappointing. The staff was unresponsive, and basic services like housekeeping and room service were delayed. Despite multiple requests, things were never provided on time, which affected the overall comfort of our stay.",
+        photos: ["/Images/kannur.jpg",]
+      }
+    ];
+
+    // DOM Elements
+    const reviewsList = document.getElementById('reviews-list');
+    const pagination = document.getElementById('pagination');
+    const sortButton = document.getElementById('sort-button');
+    const sortDropdown = document.getElementById('sort-dropdown');
+    const reviewForm = document.getElementById('review-form');
+    const previewImages = document.getElementById('preview-images');
+    const photoInput = document.getElementById('review-photos');
+    const imageModal = document.getElementById('image-modal');
+    const modalImage = document.getElementById('modal-image');
+    const modalClose = document.getElementById('modal-close');
+    const submissionSuccess = document.querySelector('.submission-success');
+
+    // Variables
+    let currentPage = 1;
+    const reviewsPerPage = 3;
+    let currentSort = 'recent';
+    let reviews = [...sampleReviews];
+    let uploadedImages = [];
+
+    // Initialize page
+    displayReviews();
+    setupPagination();
+
+    // Event Listeners
+    sortButton.addEventListener('click', () => {
+      sortDropdown.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!sortButton.contains(e.target) && !sortDropdown.contains(e.target)) {
+        sortDropdown.classList.remove('active');
+      }
+    });
+
+    sortDropdown.addEventListener('click', (e) => {
+      if (e.target.tagName === 'LI') {
+        currentSort = e.target.dataset.sort;
+        sortButton.textContent = `Sort by: ${e.target.textContent}`;
+        sortDropdown.classList.remove('active');
+        sortReviews();
+        displayReviews();
+      }
+    });
+
+    photoInput.addEventListener('change', handleImageUpload);
+
+    reviewForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      submitReview();
+    });
+
+    modalClose.addEventListener('click', () => {
+      imageModal.classList.remove('active');
+    });
+
+    // Functions
+    function displayReviews() {
+      if (reviews.length === 0) {
+        reviewsList.innerHTML = '<div class="no-reviews">No reviews yet. Be the first to leave a review!</div>';
+        pagination.style.display = 'none';
+        return;
+      }
+
+      const startIndex = (currentPage - 1) * reviewsPerPage;
+      const endIndex = startIndex + reviewsPerPage;
+      const paginatedReviews = reviews.slice(startIndex, endIndex);
+
+      reviewsList.innerHTML = '';
+      
+      paginatedReviews.forEach(review => {
+        const reviewElement = document.createElement('div');
+        reviewElement.className = 'review-item';
+        
+        // Create stars HTML
+        let starsHTML = '';
+        for (let i = 1; i <= 5; i++) {
+          starsHTML += `<span class="star">${i <= review.rating ? '★' : '☆'}</span>`;
+        }
+        
+        // Create photos HTML
+        let photosHTML = '';
+        if (review.photos && review.photos.length > 0) {
+          photosHTML = '<div class="review-photos">';
+          review.photos.forEach(photo => {
+            photosHTML += `<img src="${photo}" class="review-photo" onclick="openModal('${photo}')">`;
+          });
+          photosHTML += '</div>';
+        }
+        
+        reviewElement.innerHTML = `
+          <div class="review-header">
+            <div class="reviewer-info">
+              <div class="reviewer-avatar">${review.name.charAt(0)}</div>
+              <div>
+                <div class="reviewer-name">${review.name} ${review.verified ? '<span class="verified-badge">Verified Purchase</span>' : ''}</div>
+                <div class="reviewer-date">${review.date}</div>
+              </div>
+            </div>
+          </div>
+          <div class="review-rating">
+            ${starsHTML}
+          </div>
+          <div class="review-title">${review.title}</div>
+          <div class="review-text">${review.content}</div>
+          ${photosHTML}
+        `;
+        
+        reviewsList.appendChild(reviewElement);
+      });
+      
+      setupPagination();
+    }
+
+    function setupPagination() {
+      const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+      
+      if (totalPages <= 1) {
+        pagination.style.display = 'none';
+        return;
+      }
+      
+      pagination.style.display = 'flex';
+      pagination.innerHTML = '';
+      
+      // Previous button
+      if (currentPage > 1) {
+        const prevButton = document.createElement('div');
+        prevButton.className = 'pagination-button';
+        prevButton.innerHTML = '&laquo;';
+        prevButton.addEventListener('click', () => {
+          currentPage--;
+          displayReviews();
+        });
+        pagination.appendChild(prevButton);
+      }
+      
+      // Page numbers
+      for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('div');
+        pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+        pageButton.textContent = i;
+        pageButton.addEventListener('click', () => {
+          currentPage = i;
+          displayReviews();
+        });
+        pagination.appendChild(pageButton);
+      }
+      
+      // Next button
+      if (currentPage < totalPages) {
+        const nextButton = document.createElement('div');
+        nextButton.className = 'pagination-button';
+        nextButton.innerHTML = '&raquo;';
+        nextButton.addEventListener('click', () => {
+          currentPage++;
+          displayReviews();
+        });
+        pagination.appendChild(nextButton);
+      }
+    }
+
+    function sortReviews() {
+      switch (currentSort) {
+        case 'recent':
+          reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+          break;
+        case 'highest':
+          reviews.sort((a, b) => b.rating - a.rating);
+          break;
+        case 'lowest':
+          reviews.sort((a, b) => a.rating - b.rating);
+          break;
+      }
+      
+      currentPage = 1;
+    }
+
+    function handleImageUpload(e) {
+      const files = Array.from(e.target.files);
+      
+      if (files.length + uploadedImages.length > 5) {
+        alert('You can upload a maximum of 5 images');
+        return;
+      }
+      
+      files.forEach(file => {
+        if (file.size > 5 * 1024 * 1024) {
+          alert('Image size should not exceed 5MB');
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const imageUrl = event.target.result;
+          uploadedImages.push(imageUrl);
+          
+          const imageContainer = document.createElement('div');
+          imageContainer.className = 'preview-image-container';
+          
+          const image = document.createElement('img');
+          image.className = 'preview-image';
+          image.src = imageUrl;
+          
+          const removeButton = document.createElement('div');
+          removeButton.className = 'remove-image';
+          removeButton.textContent = '×';
+          removeButton.addEventListener('click', () => {
+            const index = uploadedImages.indexOf(imageUrl);
+            if (index > -1) {
+              uploadedImages.splice(index, 1);
+            }
+            imageContainer.remove();
+          });
+          
+          imageContainer.appendChild(image);
+          imageContainer.appendChild(removeButton);
+          previewImages.appendChild(imageContainer);
+        };
+        
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function submitReview() {
+      const rating = document.querySelector('input[name="rating"]:checked');
+      const title = document.getElementById('review-title').value;
+      const content = document.getElementById('review-content').value;
+      const name = document.getElementById('reviewer-name').value;
+      
+      if (!rating || !title || !content || !name) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      
+      const newReview = {
+        id: reviews.length + 1,
+        name: name,
+        date: new Date().toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+        rating: parseInt(rating.value),
+        title: title,
+        content: content,
+        photos: [...uploadedImages],
+        verified: true
+      };
+      
+      reviews.unshift(newReview);
+      
+      // Reset form
+      reviewForm.reset();
+      uploadedImages = [];
+      previewImages.innerHTML = '';
+      
+      // Show success message
+      submissionSuccess.style.display = 'block';
+      setTimeout(() => {
+        submissionSuccess.style.display = 'none';
+      }, 5000);
+      
+      // Update display
+      sortReviews();
+      displayReviews();
+      
+      // Update overall rating
+      updateOverallRating();
+    }
+
+    function updateOverallRating() {
+      const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
+      const averageRating = totalRatings / reviews.length;
+      
+      document.querySelector('.big-rating').textContent = averageRating.toFixed(1);
+      document.querySelector('.rating-count').textContent = `Based on ${reviews.length} reviews`;
+      
+      // Update rating bars
+      const counts = [0, 0, 0, 0, 0]; // 1-5 stars
+      reviews.forEach(review => {
+        counts[review.rating - 1]++;
+      });
+      
+      const ratingBars = document.querySelectorAll('.rating-bar');
+      for (let i = 0; i < 5; i++) {
+        const percentage = Math.round((counts[4 - i] / reviews.length) * 100);
+        ratingBars[i].querySelector('.bar-fill').style.width = `${percentage}%`;
+        ratingBars[i].querySelector('.bar-percent').textContent = `${percentage}%`;
+      }
+    }
+
+    function openModal(imageUrl) {
+      modalImage.src = imageUrl;
+      imageModal.classList.add('active');
+    }
+
+    // Expose functions to global scope for inline HTML event handlers
+    window.openModal = openModal;
+  </script>
+</body>
+</html>
